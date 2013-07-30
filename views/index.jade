@@ -13,6 +13,8 @@ block content
     h3 Paste anything you want, your data is client-side encrypted !
 
   #paste
+    .row
+      textarea#pasteTa
     .row#pasteButtons
       a#pasteUrl(href='#') no paste url
       #pasteSubmit.btn.btn-primary.btn-large Yaap it !
@@ -20,5 +22,3 @@ block content
     .row
       label.pull-right Burn after reading &nbsp;
         input(type='checkbox', name='burn')
-    .row
-      textarea#pasteTa
