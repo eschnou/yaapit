@@ -1,0 +1,51 @@
+Name:          yaapit
+Version:       #VERSION#
+Release:       #RELEASE#
+%global short_name    yappit-%{version}
+Summary:       Community driver paste service
+Group:         System Environment/Daemons
+License:       MIT
+Vendor:        yaap.it
+URL:           http://yaap.it/
+Source0:       %{name}-%{version}-#RELEASE#.tar.gz
+BuildRoot:     %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
+Requires:      nodejs >= 0.8
+Requires:      forever >= 0.10
+BuildRequires: nodejs >= 0.8
+BuildRequires: make
+BuildRequires: gcc
+BuildRequires: gcc-c++
+
+%description
+A client-side encrypted paste service. For now, the project is really simple, no extra feature.
+
+%prep
+%setup -c -q -n %{name}-%{version}
+
+%build
+export LANG=en_US.UTF-8
+npm install
+
+%install
+%{__mkdir} -p $RPM_BUILD_ROOT%{_bindir}
+%{__mkdir} -p $RPM_BUILD_ROOT%{_prefix}/lib/yaapit/
+%{__mkdir} -p $RPM_BUILD_ROOT%{_localstatedir}/log/yaapit
+%{__mkdir} -p $RPM_BUILD_ROOT%{_localstatedir}/lib/yaapit
+%{__mkdir} -p $RPM_BUILD_ROOT%{_sysconfdir}/rc.d/init.d/
+
+%{__cp} -r node_modules public routes views app.js $RPM_BUILD_ROOT%{_prefix}/lib/yaapit/
+%{__cp} build/etc/init.d/yaapit $RPM_BUILD_ROOT%{_sysconfdir}/rc.d/init.d/
+
+%files
+%doc README.md
+%defattr(644,root,root,-)
+%{_prefix}/lib/yaapit/*
+%defattr(755,root,root,-)
+%{_sysconfdir}/rc.d/init.d/yaapit
+%attr(770,root,root) %dir %{_localstatedir}/log/yaapit
+%attr(770,root,root) %dir %{_localstatedir}/lib/yaapit
+
+%changelog
+* Tue Jul 30 2013 Laurent Eschenauer <laurent@eschenauer.be> - 0.0.1
+- Initial packaging.
+
